@@ -2,16 +2,12 @@
   <div
     v-if="links && links.length > 0"
     id="footer-link"
-    class="flex flex-col items-center py-8 bg-ob-deep-900"
+    class="flex flex-col items-center pt-2 bg-ob-deep-900"
+    style="background-color: #333333"
   >
-    <div class="footer-link-divider" :style="gradientBackground">
-      <div class="footer-link-img-wrapper">
-        <img v-show="avatar" :class="avatarClass" :src="avatar" alt="avatar" />
-      </div>
-    </div>
-
     <div
-      class="flex flex-row flex-wrap justify-center bg-ob-deep-900 rounded-lg max-w-10/12 lg:max-w-screen-2xl text-normal text-ob-normal w-full py-6 px-6 items-start gap-8 md:gap-10 xl:gap-16"
+      class="flex flex-row flex-wrap justify-center bg-ob-deep-900 max-w-10/12 lg:max-w-screen-2xl text-normal text-ob-normal w-full py-6 px-6 items-start gap-8 md:gap-10 xl:gap-16"
+      style="background-color: #333333; letter-spacing: 3px"
     >
       <div
         v-for="[i, link] of links.entries()"
@@ -34,6 +30,7 @@
           <li
             v-for="[i, sub] of link.links.entries()"
             class="cursor-pointer"
+            style="color: white; letter-spacing: normal"
             :key="i"
           >
             <a :href="sub.url" target="_blank">{{ sub.title }}</a>
@@ -57,6 +54,30 @@
           </li>
         </ul>
       </div>
+    </div>
+
+    <div
+      class="d-flex justify-content-center"
+      style="color: #959595; font-size: small"
+    >
+      <h4>
+        Copyright © {{ new Date().getFullYear() }} - HardGamers - Todos los
+        derechos reservados
+      </h4>
+    </div>
+  </div>
+
+  <div class="row py-2" style="background-color: black">
+    <div
+      class="flex flex-row flex-wrap justify-center"
+      style="color: white; font-size: small; font-weight: 500"
+    >
+      <a href="https://www.hardgamers.com.ar/about/terms" class="mr-4">
+        <h4>Términos y condiciones</h4>
+      </a>
+      <a href="https://www.hardgamers.com.ar/about/privacy" class="ml-4">
+        <h4>Política de privacidad</h4>
+      </a>
     </div>
   </div>
 </template>

@@ -23,7 +23,6 @@
     <div id="loading-bar-wrapper" :class="loadingBarClass"></div>
   </div>
   <FooterLink :links="themeConfig.footerLinks.data" />
-  <FooterContainer :style="cssVariables" />
   <template v-if="isMobile">
     <MobileMenu />
   </template>
@@ -61,7 +60,6 @@ import { useLightBoxStore } from '@/stores/lightbox'
 import { useMetaStore } from '@/stores/meta'
 import { useSearchStore } from './stores/search'
 import HeaderMain from '@/components/Header/src/Header.vue'
-import FooterContainer from '@/components/Footer/FooterContainer.vue'
 import Navigator from '@/components/Navigator.vue'
 import MobileMenu from '@/components/MobileMenu.vue'
 import Dia from '@/components/Dia.vue'
@@ -74,7 +72,6 @@ export default defineComponent({
   name: 'App',
   components: {
     HeaderMain,
-    FooterContainer,
     Navigator,
     MobileMenu,
     Dia,
