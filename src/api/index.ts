@@ -44,6 +44,9 @@ export async function fetchPostsListByTag(
     `/tags/${tagName}.json`
   )
 
+  response.data.pageSize = pageSize
+  response.data.total = response.data.postlist.length
+  response.data.pageCount = Math.ceil(response.data.postlist.length / pageSize)
   response.data.postlist = paginator(response.data.postlist, page, pageSize)
 
   return response

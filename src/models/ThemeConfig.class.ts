@@ -171,6 +171,8 @@ enum LocalesTypes {
 export type Locales = keyof typeof LocalesTypes
 
 export class Menu {
+  /** Key of the menu */
+  key: ''
   /** Name of the menu */
   name = ''
   /** Vue router path for the menu */
@@ -186,14 +188,16 @@ export class Menu {
    * @param raw Config data generated from Hexo
    */
   constructor(menu: { [key: string]: any }) {
+    this.key = menu.key
     this.name = menu.name
     this.path = menu.path ? menu.path : null
     this.i18n = menu.i18n ? menu.i18n : {}
-    this.children = menu.children
-      ? Object.keys(menu.children).map(
-          (key: string) => new Menu(menu.children[key])
-        )
-      : []
+
+    if (menu.children) {
+      for (const [key, children] of Object.entries(menu.children)) {
+        this.children.push(new Menu({ key, ...children }))
+      }
+    }
   }
 }
 

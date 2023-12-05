@@ -27,7 +27,7 @@ import PageContent from '@/components/PageContent.vue'
 import Breadcrumbs from '@/components/Breadcrumbs.vue'
 import Comment from '@/components/Comment.vue'
 import useCommentPlugin from '@/hooks/useCommentPlugin'
-import { Locales } from '@/models/ThemeConfig.class'
+import { Locales, Menu } from '@/models/ThemeConfig.class'
 
 export default defineComponent({
   name: 'ARPage',
@@ -54,19 +54,28 @@ export default defineComponent({
 
     const updateTitle = (locale?: Locales) => {
       const currentLocale = locale ?? 'en'
-      const routeInfo =
-        appStore.themeConfig.menu.menus[String(route.params.slug)]
+
+      let routeInfo: Menu | undefined =
+        appStore.themeConfig.menu.menus[String(route.params.slug)];
+
+        if (!routeInfo) {
+            for (const [key, menu] of Object.entries(appStore.themeConfig.menu.menus)) {
+                routeInfo = menu.children.find(c => c.key == route.params.slug)
+                if (routeInfo) {
+                    break
+                }
+            }
+        }
+
       pageTitle.value =
-        (routeInfo.i18n && routeInfo.i18n[currentLocale]) || routeInfo.name
+        (routeInfo?.i18n && routeInfo.i18n[currentLocale]) || routeInfo?.name
       metaStore.setTitle(pageTitle.value)
     }
 
     watch(
-      () => appStore.locale,
-      value => {
-        if (value) {
-          updateTitle(value)
-        }
+      () => route.params,
+      toParams => {
+        if (toParams.slug && route.fullPath.indexOf('#') === -1) fetchArticle()
       }
     )
 
