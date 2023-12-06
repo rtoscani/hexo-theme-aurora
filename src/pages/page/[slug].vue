@@ -27,7 +27,7 @@ import PageContent from '@/components/PageContent.vue'
 import Breadcrumbs from '@/components/Breadcrumbs.vue'
 import Comment from '@/components/Comment.vue'
 import useCommentPlugin from '@/hooks/useCommentPlugin'
-import { Locales } from '@/models/ThemeConfig.class'
+import { Locales, Menu } from '@/models/ThemeConfig.class'
 
 export default defineComponent({
   name: 'ARPage',
@@ -52,20 +52,35 @@ export default defineComponent({
       updateTitle(appStore.locale)
     }
 
+    const getChildRouteInfo = (menus: Menu[]) => {
+      for (const menu of menus) {
+        const routeInfo = menu.children.find(c => c.key == route.params.slug)
+        if (routeInfo) {
+          return routeInfo
+        }
+      }
+
+      return undefined
+    }
+
     const updateTitle = (locale?: Locales) => {
       const currentLocale = locale ?? 'en'
       const routeInfo =
-        appStore.themeConfig.menu.menus[String(route.params.slug)]
+        appStore.themeConfig.menu.menus[String(route.params.slug)] ??
+        getChildRouteInfo(Object.values(appStore.themeConfig.menu.menus))
       pageTitle.value =
         (routeInfo.i18n && routeInfo.i18n[currentLocale]) || routeInfo.name
       metaStore.setTitle(pageTitle.value)
     }
 
     watch(
-      () => appStore.locale,
-      value => {
-        if (value) {
-          updateTitle(value)
+      () => ({ locale: appStore.locale, params: route.params }),
+      ({ locale, params }) => {
+        if (locale) {
+          updateTitle(locale)
+        }
+        if (params && params.slug && route.fullPath.indexOf('#') === -1) {
+          fetchArticle()
         }
       }
     )
